@@ -12,12 +12,44 @@
         @if($messages->isEmpty())
             <p>No hay mensajes en la base de datos</p>
         @else
-            <ul>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Mensaje</th>
+                        <th>Editar mensaje</th>
+                    </tr>
+                </thead>
                 @foreach($messages as $message)
-                    <li>{{ $message->text }}</li>
+                    <tbody>
+                        <tr>
+                            @if($message->negrita==true && $message->subrayado==true)
+                                <td><b><u>{{$message->text}}</u></b></td>
+                            @elseif($message->negrita==true)
+                                <td><b>{{$message->text}}</b></td>
+                            @elseif($message->subrayado==true)
+                                <td><u>{{$message->text}}</u></td>
+                            @else
+                                <td>{{$message->text}}</td>
+                            @endif
+                            <td>
+                                <form action="{{ route('edicion.solicitud', $message->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit">Editar duda</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
                 @endforeach
-            </ul>
+            </table>
         @endif
+
+        @if($errors->any())
+        <ul>
+            @foreach($errors->all() as $error)
+                <li>{{$error}}</li>
+            @endforeach
+        </ul>
+    @endif
     </div>
 </body>
 </html>
